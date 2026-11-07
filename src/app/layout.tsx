@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="bn"
       className={`${notoSansBengali.className} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col bg-green-600/4">
         {/* Fixed Header */}
         <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-sm">
           <Navbar />
@@ -40,7 +40,7 @@ export default function RootLayout({
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 pt-42 pb-16 bg-green-600/4">{children}</main>
+        <main className="flex-1 pt-42 pb-16">{children}</main>
 
         <Footer />
       </body>

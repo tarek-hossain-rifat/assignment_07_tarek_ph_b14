@@ -22,11 +22,17 @@ const HeroSection = () => {
             চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক
             বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
           </p>
-          <Link href={"/"}>
-            <Button className="bg-green-700 text-white border-md border-0 rounded-xl shadow-sm shadow-green-300/5">
-              সব পণ্য দেখুন
-            </Button>
-          </Link>
+          <Button
+            onClick={() => {
+              document.getElementById("all-products")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }}
+            className="bg-green-700 text-white border-0 rounded-xl shadow-sm shadow-green-300/5"
+          >
+            সব পণ্য দেখুন
+          </Button>
         </div>
         <div className="flex-1 flex flex-row items-center justify-end">
           <Image

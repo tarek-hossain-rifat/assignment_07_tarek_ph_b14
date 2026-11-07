@@ -12,45 +12,46 @@ const db = client.db("assignment-07-ph-tarek-db");
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
-    sendResetPassword: async (
-      { user, url }: { user: User; url: string },
-      request?: Request,
-    ) => {
-      const { data, error } = await resend.emails.send({
-        from: "Acme <onboarding@resend.dev>",
-        to: user.email,
-        subject: "Reset your password",
-        html: `
-        <h1>Reset your password</h1>
-        <p>Click the link below to reset your password.</p>
-        <a href="${url}">Reset Password</a>
-      `,
-      });
-      if (error) {
-        console.error("Resend password reset email error:", error);
-      } else {
-        console.log("Password reset email accepted by Resend:", data);
-      }
-    },
+    autoSignIn: true,
+    requireEmailVerification: false,
+    // sendResetPassword: async (
+    //   { user, url }: { user: User; url: string },
+    //   request?: Request,
+    // ) => {
+    //   const { data, error } = await resend.emails.send({
+    //     from: "Acme <onboarding@resend.dev>",
+    //     to: user.email,
+    //     subject: "Reset your password",
+    //     html: `
+    //     <h1>Reset your password</h1>
+    //     <p>Click the link below to reset your password.</p>
+    //     <a href="${url}">Reset Password</a>
+    //   `,
+    //   });
+    //   if (error) {
+    //     console.error("Resend password reset email error:", error);
+    //   } else {
+    //     console.log("Password reset email accepted by Resend:", data);
+    //   }
+    // },
   },
 
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }, request) => {
-      void resend.emails.send({
-        from: "Acme <onboarding@resend.dev>",
-        to: user.email,
-        subject: "Verify your email address",
-        html: `<h1>Verify your email address</h1>
-        <br />
-        Click <a href="${url}">here</a> to verify your email.
-        `,
-      });
-    },
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
-    expiresIn: 3600, // 1 hour in seconds
-  },
+  // emailVerification: {
+  //   sendVerificationEmail: async ({ user, url }, request) => {
+  //     void resend.emails.send({
+  //       from: "Acme <onboarding@resend.dev>",
+  //       to: user.email,
+  //       subject: "Verify your email address",
+  //       html: `<h1>Verify your email address</h1>
+  //       <br />
+  //       Click <a href="${url}">here</a> to verify your email.
+  //       `,
+  //     });
+  //   },
+  //   sendOnSignUp: true,
+  //   autoSignInAfterVerification: true,
+  //   expiresIn: 3600, // 1 hour in seconds
+  // },
 
   socialProviders: {
     google: {
