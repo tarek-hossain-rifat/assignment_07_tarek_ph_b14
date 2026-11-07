@@ -3,7 +3,7 @@ import type { Product } from "@/types";
 import SingleProductCard from "./SingleProductCard";
 
 type PricesDecreasedProps = {
-  products: Pick<Product, "nameBn" | "today" | "change" | "image">[];
+  products: Pick<Product, "nameBn" | "today" | "change" | "image" | "unit">[];
 };
 
 const PricesDecreased = ({ products }: PricesDecreasedProps) => {

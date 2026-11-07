@@ -48,6 +48,7 @@ export default function Home() {
       today: product.today,
       change: product.change,
       image: product.image,
+      unit: product.unit
     }));
 
   const decreasedProducts = products
@@ -57,6 +58,7 @@ export default function Home() {
       today: product.today,
       change: product.change,
       image: product.image,
+      unit: product.unit,
     }));
 
   const allProduct = products.map((product) => ({
@@ -64,6 +66,7 @@ export default function Home() {
     today: product.today,
     change: product.change,
     image: product.image,
+    unit: product.unit,
   }));
 
   return (

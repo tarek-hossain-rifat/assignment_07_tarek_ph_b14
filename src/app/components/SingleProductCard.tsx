@@ -3,14 +3,25 @@ import type { Product } from "@/types";
 import Link from "next/link";
 
 interface SingleProductCardProps {
-  product: Pick<Product, "nameBn" | "today" | "change" | "image">;
+  product: Pick<
+    Product,
+    "slug" | "nameBn" | "today" | "change" | "image" | "unit"
+  >;
 }
 
 const SingleProductCard = ({ product }: SingleProductCardProps) => {
   const isDown = product.change.dir === "down";
 
+  const unitInBangla: Record<string, string> = {
+    kg: "কেজি",
+    gram: "গ্রাম",
+    litre: "লিটার",
+    piece: "টি",
+    dozen: "ডজন",
+  };
+
   return (
-    <Link href={""}>
+    <Link href={`/product/${product.slug}`}>
       <div className="p-4 w-full bg-white rounded-xl shadow-md flex flex-col gap-1">
         <div className="flex flex-row items-center gap-2">
           <div className="p-3 bg-gray-400/18 border-0 rounded-xl">
@@ -19,7 +30,9 @@ const SingleProductCard = ({ product }: SingleProductCardProps) => {
 
           <div>
             <p className="font-bold">{product.nameBn}</p>
-            <p className="font-light text-sm">প্রতি কেজি</p>
+            <p className="font-light text-sm">
+              প্রতি {unitInBangla[product.unit] || product.unit}
+            </p>
           </div>
         </div>
 
