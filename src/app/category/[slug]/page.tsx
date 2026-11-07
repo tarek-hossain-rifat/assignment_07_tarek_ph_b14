@@ -1,4 +1,6 @@
+
 import React, { Suspense } from "react";
+import { connection } from "next/server";
 import type { Product } from "@/types";
 import SingleProductCard from "../../components/SingleProductCard";
 
@@ -11,6 +13,9 @@ const CategoryProducts = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  // Wait for an incoming request before rendering
+  await connection();
+
   const { slug } = await params;
 
   let products: Product[] = [];
@@ -46,9 +51,13 @@ const CategoryProducts = async ({
       {/* Category Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{categoryName}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {categoryName}
+          </h1>
 
-          <p className="text-sm text-gray-500 mt-1">এই ক্যাটাগরির সকল পণ্য</p>
+          <p className="text-sm text-gray-500 mt-1">
+            এই ক্যাটাগরির সকল পণ্য
+          </p>
         </div>
 
         <div className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-sm font-medium">
@@ -60,12 +69,17 @@ const CategoryProducts = async ({
       {productCount > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product) => (
-            <SingleProductCard key={product.id} product={product} />
+            <SingleProductCard
+              key={product.id}
+              product={product}
+            />
           ))}
         </div>
       ) : (
         <div className="text-center py-16 bg-gray-50 rounded-xl">
-          <p className="text-gray-500">এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।</p>
+          <p className="text-gray-500">
+            এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।
+          </p>
         </div>
       )}
     </main>

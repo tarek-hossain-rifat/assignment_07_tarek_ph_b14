@@ -41,33 +41,15 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const increasedProducts = products
-    .filter((product) => product.change.dir === "up")
-    .map((product) => ({
-      nameBn: product.nameBn,
-      today: product.today,
-      change: product.change,
-      image: product.image,
-      unit: product.unit
-    }));
+  const increasedProducts = products.filter(
+    (product) => product.change.dir === "up",
+  );
 
-  const decreasedProducts = products
-    .filter((product) => product.change.dir === "down")
-    .map((product) => ({
-      nameBn: product.nameBn,
-      today: product.today,
-      change: product.change,
-      image: product.image,
-      unit: product.unit,
-    }));
+  const decreasedProducts = products.filter(
+    (product) => product.change.dir === "down",
+  );
 
-  const allProduct = products.map((product) => ({
-    nameBn: product.nameBn,
-    today: product.today,
-    change: product.change,
-    image: product.image,
-    unit: product.unit,
-  }));
+  const allProduct = products;
 
   return (
     <div>

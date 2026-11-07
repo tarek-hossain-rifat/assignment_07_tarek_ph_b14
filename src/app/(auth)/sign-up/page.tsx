@@ -12,15 +12,29 @@ import {
 } from "@heroui/react";
 
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import React, { useState } from "react";
-import { signUp, signIn } from "@/lib/auth-client";
+import React, { useState, Suspense } from "react";
+import { signUp, signIn, useSession } from "@/lib/auth-client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function SignUpPage() {
+const SignUpForm = () => {
   const [isVisible, setIsVisible] = useState(false);
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const { isPending } = useSession();
+
+  // Get callback URL from search params
+  const requestedCallbackURL = searchParams.get("callbackURL");
+
+  // Allow only internal URLs
+  const callbackURL =
+    requestedCallbackURL?.startsWith("/") &&
+    !requestedCallbackURL.startsWith("//")
+      ? requestedCallbackURL
+      : "/";
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +58,7 @@ export default function SignUpPage() {
         name: data.name,
         email: data.email,
         password: data.password,
-        callbackURL: "/",
+        callbackURL,
       });
 
       if (error) {
@@ -54,7 +68,7 @@ export default function SignUpPage() {
       }
 
       if (resData) {
-        router.replace("/");
+        router.replace(callbackURL);
         router.refresh();
       }
     } catch (error) {
@@ -63,11 +77,14 @@ export default function SignUpPage() {
     }
   };
 
+  // Google Sign Up
   const googleSignUp = async () => {
     try {
+      if (isPending) return;
+
       const { error } = await signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL,
       });
 
       if (error) {
@@ -244,6 +261,7 @@ export default function SignUpPage() {
         {/* Google Sign Up */}
         <div className="w-full flex flex-row items-center justify-center">
           <Button
+            isDisabled={isPending}
             className="w-full bg-white text-gray-900 border border-gray-200 rounded-xl"
             onPress={googleSignUp}
           >
@@ -259,19 +277,41 @@ export default function SignUpPage() {
           </Button>
         </div>
 
+        {/* Sign In Link */}
         <div className="flex flex-row text-sm gap-1 items-center justify-center mt-4 mb-2">
           <p>অ্যাকাউন্ট আছে?</p>
-          <Link href={"/sign-in"}>
+
+          <Link
+            href={{
+              pathname: "/sign-in",
+              query: requestedCallbackURL ? { callbackURL } : {},
+            }}
+          >
             <span className="text-green-600">সাইন ইন করুন</span>
           </Link>
         </div>
       </div>
 
+      {/* Home Link */}
       <div className="text-gray-400 text-sm mt-3">
         <p>
-          <Link href={"/"}>← হোম পেজে ফিরে যান</Link>
+          <Link href="/">← হোম পেজে ফিরে যান</Link>
         </p>
       </div>
     </div>
+  );
+};
+
+export default function SignUpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-4xl mx-auto mt-7 flex justify-center">
+          <p className="text-gray-500">লোড হচ্ছে...</p>
+        </div>
+      }
+    >
+      <SignUpForm />
+    </Suspense>
   );
 }

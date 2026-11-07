@@ -5,7 +5,7 @@ import Link from "next/link";
 interface SingleProductCardProps {
   product: Pick<
     Product,
-    "slug" | "nameBn" | "today" | "change" | "image" | "unit"
+    "nameBn" | "today" | "change" | "image" | "unit" | "id"
   >;
 }
 
@@ -21,7 +21,7 @@ const SingleProductCard = ({ product }: SingleProductCardProps) => {
   };
 
   return (
-    <Link href={`/product/${product.slug}`}>
+    <Link href={`/product/${product.id}`}>
       <div className="p-4 w-full bg-white rounded-xl shadow-md flex flex-col gap-1">
         <div className="flex flex-row items-center gap-2">
           <div className="p-3 bg-gray-400/18 border-0 rounded-xl">

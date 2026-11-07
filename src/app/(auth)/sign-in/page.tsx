@@ -12,15 +12,29 @@ import {
 } from "@heroui/react";
 
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import React, { useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import React, { useState, Suspense } from "react";
+import { signIn, signOut, useSession } from "@/lib/auth-client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const SignInPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
+const SignInForm = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const { data: session, isPending } = useSession();
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Get callback URL from search params
+  const requestedCallbackURL = searchParams.get("callbackURL");
+
+  // Allow only internal URLs
+  const callbackURL =
+    requestedCallbackURL?.startsWith("/") &&
+    !requestedCallbackURL.startsWith("//")
+      ? requestedCallbackURL
+      : "/";
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,17 +47,11 @@ const SignInPage = () => {
       data[key] = value.toString();
     });
 
-    // Confirm password validation
-    if (data.password !== data.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
     try {
       const { data: resData, error } = await signIn.email({
         email: data.email,
         password: data.password,
-        callbackURL: "/",
+        callbackURL,
       });
 
       if (error) {
@@ -53,7 +61,7 @@ const SignInPage = () => {
       }
 
       if (resData) {
-        router.replace("/");
+        router.replace(callbackURL);
         router.refresh();
       }
     } catch (error) {
@@ -62,20 +70,34 @@ const SignInPage = () => {
     }
   };
 
-  const googleSignUp = async () => {
+  const googleSignIn = async () => {
     try {
+      if (isPending) return;
+
+      // Sign out if an active session exists
+      if (session) {
+        const { error: signOutError } = await signOut();
+
+        if (signOutError) {
+          console.error("Sign out error:", signOutError);
+          alert(signOutError.message);
+          return;
+        }
+      }
+
+      // Start Google authentication
       const { error } = await signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL,
       });
 
       if (error) {
-        console.error("Google sign up error:", error);
+        console.error("Google sign in error:", error);
         alert(error.message);
       }
     } catch (error) {
-      console.error("Google sign up error:", error);
-      alert("Google sign up failed. Please try again.");
+      console.error("Google sign in error:", error);
+      alert("Google sign in failed. Please try again.");
     }
   };
 
@@ -105,7 +127,7 @@ const SignInPage = () => {
             }}
           >
             <Label>ইমেইল</Label>
-            <Input placeholder="you@example.com" />
+            <Input name="email" placeholder="you@example.com" />
             <FieldError />
           </TextField>
 
@@ -114,18 +136,9 @@ const SignInPage = () => {
             isRequired
             minLength={8}
             name="password"
-            type="password"
             validate={(value) => {
               if (value.length < 8) {
                 return "Password must be at least 8 characters";
-              }
-
-              if (!/[A-Z]/.test(value)) {
-                return "Password must contain at least one uppercase letter";
-              }
-
-              if (!/[0-9]/.test(value)) {
-                return "Password must contain at least one number";
               }
 
               return null;
@@ -138,7 +151,7 @@ const SignInPage = () => {
                 name="password"
                 className="w-full max-w-90"
                 type={isVisible ? "text" : "password"}
-                placeholder="কমপক্ষে ৮ অক্ষর"
+                placeholder="পাসওয়ার্ড লিখুন"
               />
 
               <InputGroup.Suffix className="pe-0">
@@ -180,11 +193,12 @@ const SignInPage = () => {
           <div className="flex-1 h-px bg-gray-300" />
         </div>
 
-        {/* Google Sign Up */}
+        {/* Google Sign In */}
         <div className="w-full flex flex-row items-center justify-center">
           <Button
+            isDisabled={isPending}
             className="w-full bg-white text-gray-900 border border-gray-200 rounded-xl"
-            onPress={googleSignUp}
+            onPress={googleSignIn}
           >
             <span>
               <Image
@@ -194,22 +208,46 @@ const SignInPage = () => {
                 width={20}
               />
             </span>
-            Sign up with Google
+            Sign in with Google
           </Button>
         </div>
+
+        {/* Sign Up Link */}
         <div className="flex flex-row text-sm gap-1 items-center justify-center mt-4 mb-2">
           <p>অ্যাকাউন্ট নেই?</p>
-          <Link href={"/sign-up"}>
-            <span className="text-green-600"> সাইন আপ করুন</span>
+
+          <Link
+            href={{
+              pathname: "/sign-up",
+              query: requestedCallbackURL ? { callbackURL: callbackURL } : {},
+            }}
+          >
+            <span className="text-green-600">সাইন আপ করুন</span>
           </Link>
         </div>
       </div>
+
+      {/* Home Link */}
       <div className="text-gray-400 text-sm mt-5">
         <p>
-          <Link href={"/"}>← হোম পেজে ফিরে যান</Link>
+          <Link href="/">← হোম পেজে ফিরে যান</Link>
         </p>
       </div>
     </div>
+  );
+};
+
+const SignInPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-4xl mx-auto mt-7 flex justify-center">
+          <p className="text-gray-500">লোড হচ্ছে...</p>
+        </div>
+      }
+    >
+      <SignInForm />
+    </Suspense>
   );
 };
 
