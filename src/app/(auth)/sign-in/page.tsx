@@ -9,10 +9,11 @@ import {
   Label,
   TextField,
   InputGroup,
+  toast,
 } from "@heroui/react";
 
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import React, { useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { signIn, signOut, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -26,6 +27,23 @@ const SignInForm = () => {
 
   const [isVisible, setIsVisible] = useState(false);
 
+  // Reusable toast with 4-second duration and close button
+  const showToast = (
+    message: string,
+    variant: "success" | "warning" | "danger",
+  ) => {
+    let toastId = "";
+
+    toastId = toast(message, {
+      variant,
+      timeout: 3000,
+      actionProps: {
+        children: "বন্ধ করুন",
+        onPress: () => toast.close(toastId),
+      },
+    });
+  };
+
   // Get callback URL from search params
   const requestedCallbackURL = searchParams.get("callbackURL");
 
@@ -36,7 +54,25 @@ const SignInForm = () => {
       ? requestedCallbackURL
       : "/";
 
-  const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  // Show authentication required toast
+  useEffect(() => {
+    if (searchParams.get("authRequired") === "true") {
+      showToast("Please sign in or sign up to continue.", "warning");
+
+      // Remove authRequired from URL after showing toast
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("authRequired");
+
+      const queryString = params.toString();
+
+      router.replace(queryString ? `/sign-in?${queryString}` : "/sign-in", {
+        scroll: false,
+      });
+    }
+  }, [searchParams, router]);
+
+  // Email and Password Sign In
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -56,20 +92,36 @@ const SignInForm = () => {
 
       if (error) {
         console.error("Sign in error:", error);
-        alert(error.message);
+
+        showToast(
+          error.message || "Sign in failed. Please check your credentials.",
+          "danger",
+        );
+
         return;
       }
 
       if (resData) {
-        router.replace(callbackURL);
-        router.refresh();
+        showToast("Signed in successfully!", "success");
+
+        // Keep toast visible for 4 seconds before navigation
+        setTimeout(() => {
+          router.replace(callbackURL);
+          router.refresh();
+        }, 3000);
+
+        return;
       }
+
+      showToast("Unable to sign in. Please try again.", "danger");
     } catch (error) {
       console.error("Sign in error:", error);
-      alert("Something went wrong. Please try again.");
+
+      showToast("Something went wrong. Please try again.", "danger");
     }
   };
 
+  // Google Sign In
   const googleSignIn = async () => {
     try {
       if (isPending) return;
@@ -80,7 +132,12 @@ const SignInForm = () => {
 
         if (signOutError) {
           console.error("Sign out error:", signOutError);
-          alert(signOutError.message);
+
+          showToast(
+            signOutError.message || "Unable to sign out. Please try again.",
+            "danger",
+          );
+
           return;
         }
       }
@@ -93,11 +150,16 @@ const SignInForm = () => {
 
       if (error) {
         console.error("Google sign in error:", error);
-        alert(error.message);
+
+        showToast(
+          error.message || "Google sign in failed. Please try again.",
+          "danger",
+        );
       }
     } catch (error) {
       console.error("Google sign in error:", error);
-      alert("Google sign in failed. Please try again.");
+
+      showToast("Google sign in failed. Please try again.", "danger");
     }
   };
 
@@ -219,7 +281,7 @@ const SignInForm = () => {
           <Link
             href={{
               pathname: "/sign-up",
-              query: requestedCallbackURL ? { callbackURL: callbackURL } : {},
+              query: requestedCallbackURL ? { callbackURL } : {},
             }}
           >
             <span className="text-green-600">সাইন আপ করুন</span>

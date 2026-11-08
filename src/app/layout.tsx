@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import MarqueesComponent from "./components/MarqueesComponent";
 import Footer from "./components/Footer";
+import { Toast } from "@heroui/react";
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["latin", "bengali"],
@@ -33,6 +34,7 @@ export default function RootLayout({
       className={`${notoSansBengali.className} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col bg-green-600/4">
+        <Toast.Provider placement="top" />
         {/* Fixed Header */}
         <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-sm">
           <Navbar />

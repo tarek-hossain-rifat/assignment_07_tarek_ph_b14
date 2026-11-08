@@ -16,6 +16,9 @@ export async function proxy(request: NextRequest) {
       `${request.nextUrl.pathname}${request.nextUrl.search}`,
     );
 
+    // Trigger authentication warning toast
+    signInUrl.searchParams.set("authRequired", "true");
+
     return NextResponse.redirect(signInUrl);
   }
 

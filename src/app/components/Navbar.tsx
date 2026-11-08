@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@heroui/react";
+import { Button, toast } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CurrentDate from "./CurrentDate";
@@ -14,6 +14,25 @@ interface Category {
   nameBn: string;
   icon: string;
 }
+
+// Reusable toast helper
+const showToast = (
+  message: string,
+  variant: "success" | "warning" | "danger",
+) => {
+  let toastId = "";
+
+  toastId = toast(message, {
+    variant,
+    timeout: 4000,
+    actionProps: {
+      children: "বন্ধ করুন",
+      onPress: () => toast.close(toastId),
+    },
+  });
+
+  return toastId;
+};
 
 const Navbar = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -57,10 +76,16 @@ const Navbar = () => {
       await signOut();
 
       setIsDropdownOpen(false);
-      router.replace("/");
-      router.refresh();
+
+      showToast("আপনি সফলভাবে সাইন আউট করেছেন।", "success");
+
+      setTimeout(() => {
+        router.replace("/");
+        router.refresh();
+      }, 4000);
     } catch (error) {
       console.error("Sign out failed:", error);
+      showToast("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।", "danger");
     }
   };
 

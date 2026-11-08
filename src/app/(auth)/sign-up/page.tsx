@@ -9,14 +9,34 @@ import {
   Label,
   TextField,
   InputGroup,
+  toast,
 } from "@heroui/react";
 
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import React, { useState, Suspense } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { signUp, signIn, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+
+// Reusable toast with 4-second duration and close button
+const showToast = (
+  message: string,
+  variant: "success" | "warning" | "danger",
+) => {
+  let toastId = "";
+
+  toastId = toast(message, {
+    variant,
+    timeout: 3000,
+    actionProps: {
+      children: "বন্ধ করুন",
+      onPress: () => toast.close(toastId),
+    },
+  });
+
+  return toastId;
+};
 
 const SignUpForm = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,7 +46,8 @@ const SignUpForm = () => {
 
   const { isPending } = useSession();
 
-  // Get callback URL from search params
+  const googleSuccessHandled = useRef(false);
+
   const requestedCallbackURL = searchParams.get("callbackURL");
 
   // Allow only internal URLs
@@ -36,7 +57,26 @@ const SignUpForm = () => {
       ? requestedCallbackURL
       : "/";
 
-  const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  // Show Google sign-up success toast after OAuth redirect
+  useEffect(() => {
+    if (
+      searchParams.get("googleSignUp") === "success" &&
+      !googleSuccessHandled.current
+    ) {
+      googleSuccessHandled.current = true;
+
+      showToast("Google sign-up successful!", "success");
+
+      // Redirect after toast duration
+      setTimeout(() => {
+        router.replace(callbackURL);
+        router.refresh();
+      }, 3000);
+    }
+  }, [searchParams, router, callbackURL]);
+
+  // Email and Password Sign Up
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -49,7 +89,7 @@ const SignUpForm = () => {
 
     // Confirm password validation
     if (data.password !== data.confirmPassword) {
-      alert("Passwords do not match!");
+      showToast("Passwords do not match!", "warning");
       return;
     }
 
@@ -63,17 +103,32 @@ const SignUpForm = () => {
 
       if (error) {
         console.error("Sign up error:", error);
-        alert(error.message);
+
+        showToast(
+          error.message || "Sign up failed. Please try again.",
+          "danger",
+        );
+
         return;
       }
 
       if (resData) {
-        router.replace(callbackURL);
-        router.refresh();
+        showToast("Account created successfully!", "success");
+
+        // Keep toast visible for 4 seconds before navigation
+        setTimeout(() => {
+          router.replace(callbackURL);
+          router.refresh();
+        }, 3000);
+
+        return;
       }
+
+      showToast("Unable to create your account. Please try again.", "danger");
     } catch (error) {
       console.error("Sign up error:", error);
-      alert("Something went wrong. Please try again.");
+
+      showToast("Something went wrong. Please try again.", "danger");
     }
   };
 
@@ -82,18 +137,29 @@ const SignUpForm = () => {
     try {
       if (isPending) return;
 
+      // Redirect to sign-up page after successful Google authentication
+      const googleCallbackURL = new URL("/sign-up", window.location.origin);
+
+      googleCallbackURL.searchParams.set("googleSignUp", "success");
+      googleCallbackURL.searchParams.set("callbackURL", callbackURL);
+
       const { error } = await signIn.social({
         provider: "google",
-        callbackURL,
+        callbackURL: googleCallbackURL.toString(),
       });
 
       if (error) {
         console.error("Google sign up error:", error);
-        alert(error.message);
+
+        showToast(
+          error.message || "Google sign up failed. Please try again.",
+          "danger",
+        );
       }
     } catch (error) {
       console.error("Google sign up error:", error);
-      alert("Google sign up failed. Please try again.");
+
+      showToast("Google sign up failed. Please try again.", "danger");
     }
   };
 

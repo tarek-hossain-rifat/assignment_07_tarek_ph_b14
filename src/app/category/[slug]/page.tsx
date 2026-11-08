@@ -1,19 +1,13 @@
-
 import React, { Suspense } from "react";
 import { connection } from "next/server";
 import type { Product } from "@/types";
-import SingleProductCard from "../../components/SingleProductCard";
+import CategoryContent from "../../components/CategoryContent";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const CategoryProducts = async ({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) => {
-  // Wait for an incoming request before rendering
+const CategoryProducts = async ({ params }: CategoryPageProps) => {
   await connection();
 
   const { slug } = await params;
@@ -47,42 +41,11 @@ const CategoryProducts = async ({
   const categoryName = products[0]?.categoryNameBn || slug;
 
   return (
-    <main className="max-w-7xl mx-auto p-6">
-      {/* Category Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {categoryName}
-          </h1>
-
-          <p className="text-sm text-gray-500 mt-1">
-            এই ক্যাটাগরির সকল পণ্য
-          </p>
-        </div>
-
-        <div className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-sm font-medium">
-          মোট {productCount.toLocaleString("bn-BD")} টি পণ্য
-        </div>
-      </div>
-
-      {/* Products Grid */}
-      {productCount > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((product) => (
-            <SingleProductCard
-              key={product.id}
-              product={product}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 bg-gray-50 rounded-xl">
-          <p className="text-gray-500">
-            এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।
-          </p>
-        </div>
-      )}
-    </main>
+    <CategoryContent
+      products={products}
+      productCount={productCount}
+      categoryName={categoryName}
+    />
   );
 };
 
@@ -91,6 +54,10 @@ const CategoryLoading = () => {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-6" />
+
+      <div className="flex justify-end mb-6">
+        <div className="h-10 w-40 bg-gray-200 rounded-xl animate-pulse" />
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (

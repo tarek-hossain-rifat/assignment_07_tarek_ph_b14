@@ -7,18 +7,28 @@ type PricesDecreasedProps = {
 };
 
 const PricesDecreased = ({ products }: PricesDecreasedProps) => {
+  const decreasedProducts = products.filter(
+    (product) => product.change.dir === "down",
+  );
+
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-3">
+    <section className="max-w-7xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">
         <span className="text-green-600">▼</span> আজ দাম কমেছে
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {products.map((product) => (
-          <SingleProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
+      {decreasedProducts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {decreasedProducts.map((product) => (
+            <SingleProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 py-10 bg-gray-50 rounded-xl">
+          আজ কোনো পণ্যের দাম কমেনি।
+        </p>
+      )}
+    </section>
   );
 };
 
