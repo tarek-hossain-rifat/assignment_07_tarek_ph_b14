@@ -101,6 +101,11 @@ bazar-dor/
 │   ├── icons8-google-48.png
 │   └── ...
 │
+├── screenshots/
+|   ├──category.png
+|   └── ...
+|
+|
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/
