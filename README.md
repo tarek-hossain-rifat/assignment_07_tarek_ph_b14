@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Animated project title -->
-<a href="https://github.com/your-username/bazardor">
+<a href="https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=900&color=159447&center=true&vCenter=true&width=520&height=75&lines=BAZARDOR;বাজার+দর;Know+Your+Market+Prices" alt="BazarDor animated title" />
 </a>
 
@@ -9,7 +9,7 @@
 
 **BazarDor** is a responsive market-price information platform that helps users explore everyday product prices, compare market rates, and track price movements in one place.
 
-[Live Demo](#-live-demo) · [Features](#-key-features) · [Installation](#-getting-started) · [API](#-api-reference)
+[Live Demo](https://assignment-07-tarek-ph-b14.vercel.app/) · [GitHub Repository](https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14) · [Features](#-key-features) · [Installation](#-getting-started) · [API](#-api-reference)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.4.3-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19.3.0-149ECA?logo=react)
@@ -36,6 +36,12 @@
 - [Deployment](#-deployment)
 - [Project Links](#-project-links)
 - [Acknowledgements](#-acknowledgements)
+
+## 🌐 Live Demo
+
+Explore the deployed application: **[BazarDor — Live Website](https://assignment-07-tarek-ph-b14.vercel.app/)**
+
+Source code: **[GitHub Repository](https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14)**
 
 ## 🛒 About the Project
 
@@ -165,8 +171,8 @@ Make sure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/bazardor.git
-cd bazardor
+git clone https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14.git
+cd assignment_07_tarek_ph_b14
 ```
 
 ### 2. Install dependencies
@@ -279,8 +285,8 @@ BazarDor can be deployed to [Vercel](https://vercel.com/), which supports Next.j
 
 ## 🔗 Project Links
 
-- **Live Demo:** [Add your deployed URL here](#)
-- **GitHub Repository:** [Add your repository URL here](#)
+- **Live Demo:** [https://assignment-07-tarek-ph-b14.vercel.app/](https://assignment-07-tarek-ph-b14.vercel.app/)
+- **GitHub Repository:** [tarek-hossain-rifat/assignment_07_tarek_ph_b14](https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14)
 
 ## 🙌 Acknowledgements
 
