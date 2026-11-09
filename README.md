@@ -1,9 +1,12 @@
 <div align="center">
 
 <!-- Animated project title -->
-<a href="https://github.com/tarek-hossain-rifat/assignment_07_tarek_ph_b14">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=900&color=159447&center=true&vCenter=true&width=520&height=75&lines=BAZARDOR;বাজার+দর;Know+Your+Market+Prices" alt="BazarDor animated title" />
-</a>
+<p align="center">
+  <img
+    src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=1000&color=159447&center=true&vCenter=true&width=650&height=100&lines=BAZARDOR;Know+Your+Market+Prices;Bangladesh+Market+Price+Tracker"
+    alt="BazarDor"
+  />
+</p>
 
 ### প্রয়োজনীয় পণ্যের দাম এক নজরে।
 
