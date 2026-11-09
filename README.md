@@ -68,6 +68,10 @@ Add screenshots of your deployed application to the `screenshots/` directory and
 |:---:|:---:|
 | ![Category page](screenshots/category.png) | ![Sign in page](screenshots/sign-in.png) |
 
+| Profile page | Authentication |
+|:---:|:---:|
+| ![Profile page](screenshots/profile.png) |
+
 ## ✨ Key Features
 
 - **Market overview:** Browse everyday essentials and their current listed prices from the home page.
