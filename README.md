@@ -62,7 +62,7 @@ Add screenshots of your deployed application to the `screenshots/` directory and
 
 | Home page | Product details |
 |:---:|:---:|
-| ![Home page](screenshots/home.png) | ![Product details](screenshots/product-details.png) |
+| ![Home page](screenshots/home.png) | ![Product details](screenshots/product-detail.png) |
 
 | Category page | Authentication |
 |:---:|:---:|
