@@ -2,10 +2,12 @@
 
 <!-- Animated project title -->
 <p align="center">
-  <img
-    src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=1000&color=159447&center=true&vCenter=true&width=650&height=100&lines=BAZARDOR;Know+Your+Market+Prices;Bangladesh+Market+Price+Tracker"
-    alt="BazarDor"
-  />
+  <a href="https://assignment-07-tarek-ph-b14.vercel.app">
+    <img
+      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=1000&color=159447&center=true&vCenter=true&width=650&height=100&lines=BAZARDOR;Know+Your+Market+Prices;Bangladesh+Market+Price+Tracker"
+      alt="BazarDor Animated Title"
+    />
+  </a>
 </p>
 
 ### প্রয়োজনীয় পণ্যের দাম এক নজরে।
