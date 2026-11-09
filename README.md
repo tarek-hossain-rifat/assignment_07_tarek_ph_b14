@@ -2,9 +2,9 @@
 
 <!-- Animated project title -->
 <p align="center">
-  <a href="https://assignment-07-tarek-ph-b14.vercel.app">
+  <a href="https://your-project.vercel.app">
     <img
-      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=42&pause=1000&color=159447&center=true&vCenter=true&width=650&height=100&lines=BAZARDOR;Know+Your+Market+Prices;Bangladesh+Market+Price+Tracker"
+      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=36&pause=1000&color=159447&center=true&vCenter=true&width=850&height=110&lines=BAZARDOR;Know+Your+Market+Prices;Bangladesh+Market+Price+Tracker"
       alt="BazarDor Animated Title"
     />
   </a>
