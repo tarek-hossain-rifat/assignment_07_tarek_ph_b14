@@ -69,7 +69,7 @@ Add screenshots of your deployed application to the `screenshots/` directory and
 | ![Category page](screenshots/category.png) | ![Sign in page](screenshots/sign-in.png) |
 
 | Profile page |
-|:---:|:---:|
+|:---:|
 | ![Profile page](screenshots/profile.png) |
 
 ## ✨ Key Features
